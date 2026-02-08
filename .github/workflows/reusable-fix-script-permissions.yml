@@ -153,7 +153,7 @@ jobs:
           #         pr-worktree-setup action will add run-id suffix to prevent conflicts
           sanitized_pr_branch="${pr_branch//\//-}"
           mkdir -p "${RUNNER_TEMP}/.worktree"
-          worktree_dir=".worktree/${sanitized_pr_branch}"
+          worktree_dir="${RUNNER_TEMP}/.worktree/${sanitized_pr_branch}"
 
           # ============================================
           # GITHUB_OUTPUT Block
