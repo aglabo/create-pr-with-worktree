@@ -31,20 +31,12 @@ $~*
 *swp
 *lock
 
-# session files
-*session.json
-*session
-**/*session.json
-**/*session
-
 # .env files
 .env*
 .env.*
 
-## development tools
-# tools dir
+# local tools
 .tools/
-
 
 ## AI generated files
 
@@ -69,6 +61,11 @@ tmp/
 **/temp/
 **/tmp/
 
+## Development tools (installed locally)
+.tools/
+
+# pnpm
+pnpm*lock.yaml
 
 ##  Editor
 #   VSCode
@@ -79,6 +76,10 @@ tmp/
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 !.vscode/cspell*
+
+## ShellSpec
+# ShellSpec local configuration (user-specific overrides)
+.shellspec-local
 
 ## Node
 node_modules/
