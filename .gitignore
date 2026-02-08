@@ -41,11 +41,6 @@ $~*
 .env*
 .env.*
 
-## development tools
-# tools dir
-.tools/
-
-
 ## AI generated files
 
 ## Coding AI depended
@@ -68,6 +63,13 @@ temp/
 tmp/
 **/temp/
 **/tmp/
+
+
+## Development tools (installed locally)
+.tools/
+
+# lock file
+pnpm*lock.yaml
 
 
 ##  Editor
