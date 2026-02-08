@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# src: ./.github/actions/pr-worktree-initialize/scripts/install-gitsign.sh
+# src: ./.github/actions/pr-worktree-setup/scripts/install-gitsign.sh
 # @(#) : Install gitsign for keyless signing with Sigstore
 #
 # Copyright (c) 2026- aglabo <https://github.com/aglabo>
