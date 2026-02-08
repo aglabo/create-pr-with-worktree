@@ -62,14 +62,24 @@ runs:
       run: |
         bash ${{ github.action_path }}/scripts/validate-gitsign.sh "${{ steps.install-gitsign.outputs.gitsign-path }}"
 
-    - name: Validate worktree directory
-      id: validate-directory
+    - name: Validate and normalize worktree directory
+      id: validate-worktree-dir
       if: steps.validate-gitsign.outcome == 'success'
       shell: bash
       run: |
-        # Set variables
-        WORKTREE_DIR="${{ runner.temp }}/${{ inputs.worktree-dir }}-${{ github.run-id }}"
-        WORKTREE_PARENT="${{ inputs.worktree-dir }}"
+        bash ${{ github.action_path }}/scripts/validate-worktree-dir.sh \
+          "${{ inputs.worktree-dir }}" \
+          "${{ runner.temp }}" \
+          "${{ github.run-id }}"
+
+    - name: Validate worktree directory
+      id: validate-directory
+      if: steps.validate-worktree-dir.outcome == 'success'
+      shell: bash
+      run: |
+        # Get validated paths from previous step
+        WORKTREE_DIR="${{ steps.validate-worktree-dir.outputs.worktree-dir }}"
+        WORKTREE_PARENT="${{ steps.validate-worktree-dir.outputs.worktree-parent }}"
 
         # Create parent directory
         mkdir -p "${WORKTREE_PARENT}"
@@ -216,6 +226,7 @@ runs:
         # Collect step outcomes
         INSTALL_OUTCOME="${{ steps.install-gitsign.outcome }}"
         VALIDATE_GITSIGN_OUTCOME="${{ steps.validate-gitsign.outcome }}"
+        VALIDATE_WORKTREE_DIR_OUTCOME="${{ steps.validate-worktree-dir.outcome }}"
         VALIDATE_DIRECTORY_OUTCOME="${{ steps.validate-directory.outcome }}"
         CREATE_WORKTREE_OUTCOME="${{ steps.create-worktree.outcome }}"
         CONFIGURE_GITSIGN_OUTCOME="${{ steps.configure-gitsign.outcome }}"
@@ -229,12 +240,18 @@ runs:
         if [ "$INSTALL_OUTCOME" = "failure" ]; then
           FINAL_STATUS="error"
           FINAL_MESSAGE="Gitsign installation failed"
-        elif [ "$VALIDATE_OUTCOME" = "failure" ]; then
+        elif [ "$VALIDATE_GITSIGN_OUTCOME" = "failure" ]; then
           FINAL_STATUS="error"
           FINAL_MESSAGE="Gitsign validation failed (includes output contract check)"
         elif [ "$VALIDATE_GITSIGN_OUTCOME" = "skipped" ]; then
           FINAL_STATUS="skipped"
           FINAL_MESSAGE="Gitsign validation skipped due to installation failure"
+        elif [ "$VALIDATE_WORKTREE_DIR_OUTCOME" = "failure" ]; then
+          FINAL_STATUS="error"
+          FINAL_MESSAGE="Worktree directory validation failed: ${{ steps.validate-worktree-dir.outputs.message }}"
+        elif [ "$VALIDATE_WORKTREE_DIR_OUTCOME" = "skipped" ]; then
+          FINAL_STATUS="skipped"
+          FINAL_MESSAGE="Worktree directory validation skipped due to previous failures"
         elif [ "$VALIDATE_DIRECTORY_OUTCOME" = "failure" ]; then
           FINAL_STATUS="error"
           FINAL_MESSAGE="Worktree directory validation failed"
