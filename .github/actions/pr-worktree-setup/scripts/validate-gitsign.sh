@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# src: ./.github/actions/pr-worktree-initialize/scripts/validate-gitsign.sh
+# src: ./.github/actions/pr-worktree-setup/scripts/validate-gitsign.sh
 # @(#) : Validate gitsign installation and OIDC environment
 #
 # Copyright (c) 2026- aglabo <https://github.com/aglabo>
