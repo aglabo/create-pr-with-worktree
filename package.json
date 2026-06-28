@@ -5,14 +5,24 @@
   "description": "create-pr composite actions",
   "author": "Furukawa, Atsushi <atsushifx@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "prepare": "bash ./scripts/setup-dev-env.sh",
-    "scan:secrets": "gitleaks dir --config ./configs/gitleaks.toml . && secretlint --secretlintrc ./configs/secretlint.config.yaml **/*",
-    "format:dprint": "dprint fmt",
+    "scan:secrets": "concurrently \"betterleaks protect --config ./configs/betterleaks.toml\" \"secretlint --secretlintrc ./configs/secretlint.config.yaml .\"",
+
     "check:dprint": "dprint check",
-    "check:spells": "cspell  --config .vscode/cspell.json --cache --cache-location .cache/cspell/cSpellCache",
-    "lint:text": "pnpm exec textlint --config ./configs/textlintrc.yaml --cache --cache-location .cache/textlintcache ",
-    "lint:markdown": "pnpm exec markdownlint-cli2 --config ./configs/.markdownlint.yaml ",
-    "tests:sh": "bash scripts/run-specs.sh --default-path "
+    "format:dprint": "dprint fmt",
+
+    "lint:sh": "bash runners/run-shellcheck.sh ",
+    "test:sh": "bash runners/run-shellspec.sh ",
+    "test:sh:all": "bash runners/run-shellspec.sh all",
+
+    "lint:gha": "concurrently \"pnpm run lint:gha:actions\" \"pnpm run lint:gha:workflows\"",
+    "lint:gha:actions": "pnpm exec actionlint --config-file ./configs/actionlint.yaml",
+    "lint:gha:workflows": "concurrently \"pnpm exec ghalint run --config ./configs/ghalint.yaml\" \"pnpm exec ghalint act --config ./configs/ghalint.yaml\"",
+
+    "lint:spells": "cspell --config .vscode/cspell.json --cache --cache-location .cache/cspell/cSpellCache ",
+    "lint:text": "textlint --config ./configs/textlintrc.yaml",
+    "lint:markdown": "markdownlint --config ./configs/.markdownlint-cli2.yaml"
   }
 }
