@@ -2,87 +2,21 @@
 # src: ./configs/ghalint.yaml
 # @(#) : ghalint configuration file
 #
-# Copyright (c) 2025 atsushifx <https://github.com/atsushifx>
+# Copyright (c) 2025- atsushifx <https://github.com/atsushifx>
 #
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
 # Exclude specific policies if needed
 excludes:
-  # Allow version tags for reusable workflow calls instead of SHA pinning
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/ci-scan-all.yml
-    job_name: actionlint
-    action_name: aglabo/.github/.github/workflows/ci-common-lint-actionlint.yml
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/ci-scan-all.yml
-    job_name: ghalint
-    action_name: aglabo/.github/.github/workflows/ci-common-lint-ghalint.yml
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/ci-scan-all.yml
-    job_name: scan-gitleaks
-    action_name: aglabo/.github/.github/workflows/ci-common-scan-gitleaks.yml
-
-  # allow test-create-pr.
-  #
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/test-create-pr.yml
-    job_name: test-action
-    step_id: setup
-    action_name: aglabo/create-pr-sandbox/.github/actions/pr-worktree-setup
-
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/test-create-pr.yml
-    job_name: test-action
-    step_id: cleanup
-    action_name: aglabo/create-pr-sandbox/.github/actions/pr-worktree-cleanup
-
-  # Allow persist-credentials: true for git push operations
+  # policy 013: checkout_persist_credentials_should_be_false
+  # Reason: These workflows run git push from within a worktree on the runner.
+  # persist-credentials: true is required so the cloned repo retains credentials
+  # for those push operations inside the worktree directory.
+  - policy_name: checkout_persist_credentials_should_be_false
+    workflow_file_path: .github/workflows/ru-fix-script-permissions.yml
+    job_name: validate-permissions
   - policy_name: checkout_persist_credentials_should_be_false
     workflow_file_path: .github/workflows/test-create-pr.yml
     job_name: test-action
-    step_id: checkout
 
-  # fix-script-permissions.yml - Allow validate-environment action to use tag refs
-  # Reason: Temporary exception for Issue #38 debugging (external action reference)
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/reusable-fix-script-permissions.yml
-    job_name: validate-permissions
-    step_id: validate-env
-    action_name: aglabo/validate-environment
-
-  # fix-script-permissions.yml - Allow create-pr-worktree actions to use tag refs
-  # Reason: Internal project actions using semantic versioning tags for stability
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/reusable-fix-script-permissions.yml
-    job_name: validate-permissions
-    step_id: setup
-    action_name: aglabo/create-pr-worktree/.github/actions/pr-worktree-setup
-
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/reusable-fix-script-permissions.yml
-    job_name: validate-permissions
-    step_id: create-pr
-    action_name: aglabo/create-pr-worktree/.github/actions/create-pr-from-worktree
-
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/reusable-fix-script-permissions.yml
-    job_name: validate-permissions
-    action_name: aglabo/create-pr-worktree/.github/actions/pr-worktree-cleanup
-
-  # Allow persist-credentials: true for worktree operations requiring git push
-  - policy_name: checkout_persist_credentials_should_be_false
-    workflow_file_path: .github/workflows/reusable-fix-script-permissions.yml
-    job_name: validate-permissions
-
-  # reusable-fix-script-permissions.yml - Allow persist-credentials for worktree operations
-  - policy_name: checkout_persist_credentials_should_be_false
-    workflow_file_path: .github/workflows/reusable-fix-script-permissions.yml
-    job_name: validate-permissions
-
-  # example-fix-script-permissions.yml - Allow reusable workflow to use tag refs
-  # Reason: Reusable workflows use semantic versioning tags for stability
-  - policy_name: action_ref_should_be_full_length_commit_sha
-    workflow_file_path: .github/workflows/example-fix-script-permissions.yml
-    job_name: fix-permissions
-    action_name: aglabo/create-pr-worktree/.github/workflows/reusable-fix-script-permissions.yml
