@@ -1,7 +1,7 @@
 // src: ./dprint.jsonc
 // @(#) : dprint configuration for project formatting
 //
-// Copyright (c) 2025 atsushifx <https://github.com/atsushifx>
+// Copyright (c) 2025- atsushifx <https://github.com/atsushifx>
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
@@ -14,12 +14,15 @@
   "newLineKind": "lf",
   // Include/Exclude patterns
   "includes": [
+    // programming languages
     "**/*.js",
     "**/*.ts",
+    // config files
     "**/*.json",
     "**/*.jsonc",
     "**/*.yml",
     "**/*.yaml",
+    "**/*.toml",
     // Documents
     "**/*.md",
   ],
@@ -37,10 +40,11 @@
   ],
   // Plugins
   "plugins": [
-    "https://plugins.dprint.dev/typescript-0.95.12.wasm",
-    "https://plugins.dprint.dev/json-0.21.0.wasm",
-    "https://plugins.dprint.dev/markdown-0.20.0.wasm",
-    "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.1.wasm",
+    "https://plugins.dprint.dev/typescript-0.96.1.wasm",
+    "https://plugins.dprint.dev/json-0.22.0.wasm",
+    "https://plugins.dprint.dev/markdown-0.22.1.wasm",
+    "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.6.0.wasm",
+    "https://plugins.dprint.dev/toml-0.7.0.wasm",
   ],
   // Language-specific settings
   "typescript": {
