@@ -37,7 +37,7 @@ jobs:
       contents: write
       pull-requests: write
       id-token: write
-    uses: ./.github/workflows/reusable-fix-script-permissions.yml
+    uses: ./.github/workflows/ru-fix-script-permissions.yml
     with:
       files-pattern: "**/*.sh"
       files-ignore-pattern: "node_modules/**\n.git/**\nvendor/**"
